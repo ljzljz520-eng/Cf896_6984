@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "metrics": {
+    "production_loc": 2309,
+    "production_files": 30,
+    "production_packages": 10,
+    "test_files": 9,
+    "production_functions": 170,
+    "decision_points": 334
+  },
+  "persistence": {
+    "module": "go.etcd.io/bbolt",
+    "entities": [
+      "Team",
+      "Player",
+      "Game",
+      "ScoreAudit",
+      "MediaAsset",
+      "GuestMessage",
+      "UserAccount"
+    ],
+    "reopen_test": "TestPersistenceSurvivesReopen"
+  },
+  "workflows": [
+    {
+      "steps": [
+        "请求公开联赛摘要",
+        "读取已发布球队、赛程和比分",
+        "计算积分榜与筛选媒体",
+        "返回不含后台控制的页面数据"
+      ],
+      "test": "TestWorkflowPublicScoreboard"
+    },
+    {
+      "steps": [
+        "球队负责人登录",
+        "提交球员名单",
+        "管理员审核名单",
+        "公开端读取已批准名单"
+      ],
+      "test": "TestWorkflowRosterReview"
+    },
+    {
+      "steps": [
+        "读取待发布比赛",
+        "校验管理员更正请求",
+        "保存新比分和更正审计",
+        "公开页面显示最新比分"
+      ],
+      "test": "TestScoreCorrectionKeepsAudit"
+    },
+    {
+      "steps": [
+        "游客提交留言",
+        "校验留言文本",
+        "持久化留言状态",
+        "返回公开留言列表"
+      ],
+      "test": "TestWorkflowGuestbook"
+    }
+  ]
+}
